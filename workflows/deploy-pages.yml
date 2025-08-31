@@ -1,0 +1,32 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ master ] # 当推送到 master 分支时触发部署，请根据你的实际分支名修改
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 允许工作流写入仓库内容（如需推送到分支）
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # 指定 Node.js 版本
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install # 或 pnpm install, yarn install
+
+      - name: Build project
+        run: npm run build # 你的构建命令，目的是生成静态文件到 dist 等目录
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3 # 一个常用的部署 Action
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # GitHub 自动提供的 token
+          publish_dir: ./dist # 构建后静态文件所在的目录，根据你的项目修改
