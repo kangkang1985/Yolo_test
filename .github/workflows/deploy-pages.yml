@@ -31,10 +31,10 @@ jobs:
       #     npm install
       #     npm run build # 请将此命令替换为您实际的构建命令
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3 # 此 Action 专为上传 Pages 产物设计
-        with:
-          path: . # 上传当前仓库的根目录。如果使用构建步骤，请改为指向输出目录（如 'dist', 'build', 'public'）
+      #- name: Upload artifact
+      #  uses: actions/upload-pages-artifact@v3 # 此 Action 专为上传 Pages 产物设计
+      #  with:
+      #    path: . # 上传当前仓库的根目录。如果使用构建步骤，请改为指向输出目录（如 'dist', 'build', 'public'）
 
   deploy:
     environment:
