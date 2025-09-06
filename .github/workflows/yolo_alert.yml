@@ -27,5 +27,5 @@ jobs:
             - **时间:** ${{ github.event.trigger.payload.time }}
 
             请及时处理。
-          to: 你的个人邮箱lumaokang1985@sina.com  # 【重要】改成你的个人收件邮箱，比如 12345@gmail.com
+          to: lumaokang1985@sina.com  # 【重要】改成你的个人收件邮箱，比如 12345@gmail.com
           from: YOLO监控助手 <${{ secrets.SINA_MAIL }}> # 发件人显示
