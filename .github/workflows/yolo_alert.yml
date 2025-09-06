@@ -24,7 +24,7 @@ jobs:
 
             - **目标类型:** ${{ github.event.trigger.payload.object }}
             - **置信度:** ${{ github.event.trigger.payload.confidence }}
-            - **时间:** ${{ github.event.trigger.payload.time }}
+          
 
             请及时处理。
           to: lumaokang1985@sina.com  # 【重要】改成你的个人收件邮箱，比如 12345@gmail.com
