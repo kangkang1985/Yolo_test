@@ -1,13 +1,29 @@
 name: 'YOLO Detection Alert'
 on:
-  webhook:
-    path: /yolo_alert
-    secret: ${{ secrets.WEBHOOK_SECRET }}
+  workflow_dispatch:
+    inputs:
+      object:
+        description: '检测到对象'
+        required: true
+        type: string
+      confidence:
+        description: '置信度'
+        required: true
+        type: string
+      time: 
+        description: '检测时间'
+        required: true
+        type: string
+    #path: /yolo_alert
+    #secret: ${{ secrets.WEBHOOK_SECRET }}
 jobs:
   alert:
     name: Send Email
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
       - name: Send Email via Sina Mail
         uses: dawidd6/action-send-mail@v3
         with:
@@ -22,8 +38,9 @@ jobs:
           body: |
             您的监控系统发现了目标！
 
-            - **目标类型:** ${{ github.event.trigger.payload.object }}
-            - **置信度:** ${{ github.event.trigger.payload.confidence }}
+            - **检测到对象:** ${{ inputs.object }}
+            - **置信度:** ${{ inputs.confidence }}
+            - **检测时间:** ${{ inputs.time }}
           
 
             请及时处理。
