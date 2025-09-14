@@ -14,6 +14,14 @@ on:
         description: '检测时间'
         required: true
         type: string
+      email_header:
+        description: '邮件称呼'
+        required: true
+        type: string
+      recipient:
+        description: "客户邮箱"
+        required: true
+        type: string
     #path: /yolo_alert
     #secret: ${{ secrets.WEBHOOK_SECRET }}
 jobs:
@@ -36,7 +44,7 @@ jobs:
           password: ${{ secrets.SINA_AUTH_CODE }}
           subject: '🚨 发现目标: ${{ github.event.trigger.payload.object }}'
           body: |
-            您的监控系统发现了目标！
+            ${{inputs.email_header}}您好，您的监控系统发现了目标！
 
             - **检测到对象:** ${{ inputs.object }}
             - **置信度:** ${{ inputs.confidence }}
@@ -44,5 +52,5 @@ jobs:
           
 
             请及时处理。
-          to: lumaokang1985@sina.com  # 【重要】改成你的个人收件邮箱，比如 12345@gmail.com
+          to: ${{inputs.recipient}}  # 【重要】改成你的个人收件邮箱，比如 12345@gmail.com
           from: YOLO监控助手 <${{ secrets.SINA_MAIL }}> # 发件人显示
