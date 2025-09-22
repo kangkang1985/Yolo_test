@@ -22,6 +22,11 @@ on:
         description: "客户邮箱"
         required: true
         type: string
+      download_url:
+        description:"视频查看链接"
+        required:false
+        type: string
+        default: "No video available"
     #path: /yolo_alert
     #secret: ${{ secrets.WEBHOOK_SECRET }}
 jobs:
@@ -49,8 +54,14 @@ jobs:
             - **检测到对象:** ${{ inputs.object }}
             - **置信度:** ${{ inputs.confidence }}
             - **检测时间:** ${{ inputs.time }}
-          
+            
+            ${{ inputs.video_url != 'No video available' && '**请查看相关视频:**' || '' }}
+            ${{ inputs.video_url != 'No video available' && inputs.video_url || '' }}
+            ${{ inputs.video_url != 'No video available' && '请注意：视频链接将在24小时后失效。' || '' }}
 
-            请及时处理。
+            如有任何疑问，请及时联系安全团队。
+
+            祝好,
+            无人机安全监控系统
           to: ${{inputs.recipient}}  # 【重要】改成你的个人收件邮箱，比如 12345@gmail.com
           from: YOLO监控助手 <${{ secrets.SINA_MAIL }}> # 发件人显示
