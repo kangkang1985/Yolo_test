@@ -25,8 +25,8 @@ on:
       download_url:
         description:"视频查看链接"
         required:false
-        type: string
-        default: "No video available"
+        type:string
+        default:"No video available"
     #path: /yolo_alert
     #secret: ${{ secrets.WEBHOOK_SECRET }}
 jobs:
