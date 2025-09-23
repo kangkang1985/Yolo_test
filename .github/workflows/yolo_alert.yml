@@ -23,11 +23,11 @@ on:
         description: 'Email address'
         required: true
         type: string
-      #download_url:  # 添加视频下载URL输入
-        #description: 'Video download URL'
-        #required: false
-        #type: string
-        #default: 'No video available'
+      download_url:  # 添加视频下载URL输入
+        description: 'Video download URL'
+        required: false
+        type: string
+        default: 'No video available'
 
 jobs:
   alert:
@@ -55,9 +55,9 @@ jobs:
             - **Confidence Level:** ${{ inputs.confidence }}
             - **Time:** ${{ inputs.time }}
 
-            #${{ inputs.download_url != 'No video available' && '**Please check the video footage:**' || '' }}
-            #${{ inputs.download_url != 'No video available' && inputs.download_url || '' }}
-            #${{ inputs.download_url != 'No video available' && 'Note: the download URL will expire in 24 hours' || '' }}
+            ${{ inputs.download_url != 'No video available' && '**Please check the video footage:**' || '' }}
+            ${{ inputs.download_url != 'No video available' && inputs.download_url || '' }}
+            ${{ inputs.download_url != 'No video available' && 'Note: the download URL will expire in 24 hours' || '' }}
 
             如有任何疑问，请及时联系安全团队。
 
