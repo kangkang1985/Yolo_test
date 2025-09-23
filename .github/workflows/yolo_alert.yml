@@ -57,8 +57,9 @@ jobs:
 
             ${{ inputs.download_url != 'No video available' && '**Please check the video footage:**' || '' }}
             ${{ inputs.download_url != 'No video available' && inputs.download_url || '' }}
-            ${{ inputs.download_url != 'No video available' && 'Note: the download URL will expire in 24 hours' || '' }}
+            ${{ inputs.download_url != 'No video available' && 'Note: the download URL is from Github, which is safe and will expire in 24 hours' || '' }}
 
+            此为自动发送的安全通知，请勿直接回复。
             如有任何疑问，请及时联系安全团队。
 
             祝好,
