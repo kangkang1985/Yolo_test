@@ -1,16 +1,17 @@
-name: 'YOLO Detection Alert'
+name: 'YOLO Detection Alert with Video'
+
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # 添加这一行，允许通过API手动触发
     inputs:
       object:
-        description: '检测到对象'
+        description: '检测到的对象'
         required: true
         type: string
       confidence:
         description: '置信度'
         required: true
         type: string
-      time: 
+      time:
         description: '检测时间'
         required: true
         type: string
@@ -19,49 +20,49 @@ on:
         required: true
         type: string
       recipient:
-        description: "客户邮箱"
+        description: '收件人邮箱'
         required: true
         type: string
-      #download_url:
-        #description:"视频查看链接"
-        #required:false
-        #type:string
-        #default:"No video available"
-    #path: /yolo_alert
-    #secret: ${{ secrets.WEBHOOK_SECRET }}
+      download_url:  # 添加视频下载URL输入
+        description: '视频下载链接'
+        required: false
+        type: string
+        default: '无可用视频'
+
 jobs:
   alert:
-    name: Send Email
+    name: Send Email Alert
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        
-      - name: Send Email via Sina Mail
+      
+      - name: Send Email via SMTP
         uses: dawidd6/action-send-mail@v3
         with:
-          # 使用新浪邮箱的SMTP服务器
-          server_address: smtp.sina.com
+          server_address: smtp.sina.com.cn
           server_port: 465
           secure: true
-          # 使用Secrets中的新浪邮箱和授权码
           username: ${{ secrets.SINA_MAIL }}
           password: ${{ secrets.SINA_AUTH_CODE }}
-          subject: '🚨 发现目标: ${{ github.event.trigger.payload.object }}'
+          subject: '🚨 安全警报: ${{ inputs.object }}检测通知 - ${{ inputs.email_header }}'
           body: |
-            ${{inputs.email_header}}您好，您的监控系统发现了目标！
+            尊敬的${{ inputs.email_header }},
 
-            - **检测到对象:** ${{ inputs.object }}
+            我们的无人机监控系统在您所在的区域检测到可疑目标。
+
+            - **目标类型:** ${{ inputs.object }}
             - **置信度:** ${{ inputs.confidence }}
             - **检测时间:** ${{ inputs.time }}
-            
-            #${{ inputs.video_url != 'No video available' && '**请查看相关视频:**' || '' }}
-            #${{ inputs.video_url != 'No video available' && inputs.video_url || '' }}
-            #${{ inputs.video_url != 'No video available' && '请注意：视频链接将在24小时后失效。' || '' }}
+
+            ${{ inputs.download_url != '无可用视频' && '**请查看相关视频 footage:**' || '' }}
+            ${{ inputs.download_url != '无可用视频' && inputs.download_url || '' }}
+
+            ${{ inputs.download_url != '无可用视频' && '请注意：视频链接将在24小时后失效。' || '' }}
 
             如有任何疑问，请及时联系安全团队。
 
             祝好,
             无人机安全监控系统
-          to: ${{inputs.recipient}}  # 【重要】改成你的个人收件邮箱，比如 12345@gmail.com
-          from: YOLO监控助手 <${{ secrets.SINA_MAIL }}> # 发件人显示
+          to: ${{ inputs.recipient }}
+          from: 无人机安全监控系统 <${{ secrets.SINA_MAIL }}>
