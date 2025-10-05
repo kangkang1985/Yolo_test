@@ -1,0 +1,17 @@
+name: 'YOLO Alert Test'
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_input:
+        description: '测试输入'
+        required: true
+        type: string
+
+jobs:
+  test:
+    name: Test Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Input
+        run: echo "输入的值是: ${{ github.event.inputs.test_input }}"
