@@ -40,7 +40,7 @@ jobs:
       - name: Send Email via SMTP
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.sina.com.cn
+          server_address: smtp.sina.com
           server_port: 465
           secure: true
           username: ${{ secrets.SINA_MAIL }}
