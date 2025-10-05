@@ -4,15 +4,17 @@ on:
   workflow_dispatch:  # 添加这一行，允许通过API手动触发
     inputs:
       object:
-        description: 'Person'
+        description: 'Detected object'
         required: true
         type: string
+        default: 'person'
       confidence:
-        description: '>=0.5'
+        description: 'Confidence level'
         required: true
         type: string
+        default: '>= 0.5'
       time:
-        description: 'Time'
+        description: 'Detected time'
         required: true
         type: string
       email_header:
