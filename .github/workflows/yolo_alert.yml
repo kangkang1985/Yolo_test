@@ -4,32 +4,30 @@ on:
   workflow_dispatch:  # 添加这一行，允许通过API手动触发
     inputs:
       object:
-        description: 'Detected object'
+        description: 'Detected Object'
         required: true
         type: string
-        default: 'person'
       confidence:
-        description: 'Confidence level'
+        description: 'Confidence Level'
         required: true
         type: string
-        default: '>= 0.5'
       time:
-        description: 'Detected time'
+        description: 'Detected Time'
         required: true
         type: string
       email_header:
-        description: 'Email header'
+        description: 'Email Header'
         required: true
         type: string
       recipient:
-        description: 'Email address'
+        description: 'Email Address'
         required: true
         type: string
       download_url:  # 添加视频下载URL输入
-        description: 'Video download URL'
+        description: 'Video Download URL'
         required: false
         type: string
-        default: 'No video available'
+        default: 'No Video Available'
 
 jobs:
   alert:
@@ -48,43 +46,23 @@ jobs:
           username: ${{ secrets.SINA_MAIL }}
           password: ${{ secrets.SINA_AUTH_CODE }}
           subject: '🚨 安全警报: ${{ inputs.object }}检测通知 - ${{ inputs.email_header }}'
-          content_type: text/html
           body: |
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="utf-8">
-                <style>
-                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                    .header { color: #2c3e50; font-size: 18px; font-weight: bold; }
-                    .details { background: #f8f9fa; padding: 15px; border-left: 4px solid #3498db; margin: 10px 0; }
-                    .video-link { color: #2980b9; text-decoration: none; }
-                    .footer { font-size: 12px; color: #7f8c8d; margin-top: 20px; }
-                </style>
-            </head>
-            <body>
-                <p class="header">尊敬的${{ inputs.email_header }}客户，</p>
-          
-                <p>我们的安全监控系统在您区域检测到活动。</p>
-          
-                <div class="details">
-                    <p><strong>检测详情：</strong></p>
-                    <ul>
-                        <li><strong>目标类型：</strong>${{ inputs.object }}</li>
-                        <li><strong>置信度：</strong>${{ inputs.confidence }}</li>
-                        <li><strong>检测时间：</strong>${{ inputs.time }}</li>
-                    </ul>
-                </div>
+            尊敬的${{ inputs.email_header }},
 
-                ${{ inputs.download_url != 'No video available' && '<p><strong>相关视频证据：</strong></p>' || '' }}
-                ${{ inputs.download_url != 'No video available' && '<p><a href="' + inputs.download_url + '" class="video-link">📹 查看监控视频</a></p>' || '' }}
-                ${{ inputs.download_url != 'No video available' && '<p><small>视频托管在GitHub官方平台，安全可靠。如果链接无法点击，请复制以下地址到浏览器：<br>' + inputs.download_url + '</small></p>' || '' }}
+            我们的无人机监控系统在您所在的区域检测到可疑目标。
 
-                <div class="footer">
-                    <p>此为自动发送的安全通知，请勿直接回复。</p>
-                    <p>如有疑问，请联系安全团队。</p>
-                </div>
-            </body>
-            </html>
+            - **目标类型:** ${{ inputs.object }}
+            - **置信度:** ${{ inputs.confidence }}
+            - **检测时间:** ${{ inputs.time }}
+
+            ${{ inputs.download_url != '无可用视频' && '**请查看相关视频 footage:**' || '' }}
+            ${{ inputs.download_url != '无可用视频' && inputs.download_url || '' }}
+
+            ${{ inputs.download_url != '无可用视频' && '请注意：视频链接将在24小时后失效。' || '' }}
+
+            如有任何疑问，请及时联系安全团队。
+
+            祝好,
+            无人机安全监控系统
           to: ${{ inputs.recipient }}
-          from: 智能安防通知 <${{ secrets.SINA_MAIL }}>
+          from: 无人机安全监控系统 <${{ secrets.SINA_MAIL }}>
