@@ -1,0 +1,68 @@
+name: 'Test'
+
+on:
+  workflow_dispatch:  # 添加这一行，允许通过API手动触发
+    inputs:
+      object:
+        description: '检测到的对象'
+        required: true
+        type: string
+      confidence:
+        description: '置信度'
+        required: true
+        type: string
+      time:
+        description: '检测时间'
+        required: true
+        type: string
+      email_header:
+        description: '邮件称呼'
+        required: true
+        type: string
+      recipient:
+        description: '收件人邮箱'
+        required: true
+        type: string
+      download_url:  # 添加视频下载URL输入
+        description: '视频下载链接'
+        required: false
+        type: string
+        default: '无可用视频'
+
+jobs:
+  alert:
+    name: Send Email Alert
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Send Email via SMTP
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.sina.com.cn
+          server_port: 465
+          secure: true
+          username: ${{ secrets.SINA_MAIL }}
+          password: ${{ secrets.SINA_AUTH_CODE }}
+          subject: '🚨 安全警报: ${{ inputs.object }}检测通知 - ${{ inputs.email_header }}'
+          body: |
+            尊敬的${{ inputs.email_header }},
+
+            我们的无人机监控系统在您所在的区域检测到可疑目标。
+
+            - **目标类型:** ${{ inputs.object }}
+            - **置信度:** ${{ inputs.confidence }}
+            - **检测时间:** ${{ inputs.time }}
+
+            ${{ inputs.download_url != '无可用视频' && '**请查看相关视频 footage:**' || '' }}
+            ${{ inputs.download_url != '无可用视频' && inputs.download_url || '' }}
+
+            ${{ inputs.download_url != '无可用视频' && '请注意：视频链接将在24小时后失效。' || '' }}
+
+            如有任何疑问，请及时联系安全团队。
+
+            祝好,
+            无人机安全监控系统
+          to: ${{ inputs.recipient }}
+          from: 无人机安全监控系统 <${{ secrets.SINA_MAIL }}>
