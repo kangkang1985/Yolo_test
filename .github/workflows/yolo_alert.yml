@@ -1,7 +1,7 @@
 name: 'YOLO Detection Alert with Video'
 
 on:
-  workflow_dispatch:  # 添加这一行，允许通过API手动触发
+  workflow_dispatch:  # Activate the workflow through the API
     inputs:
       object:
         description: 'Detected Object'
@@ -23,7 +23,7 @@ on:
         description: 'Email Address'
         required: true
         type: string
-      download_url:  # 添加视频下载URL输入
+      download_url:  # Video download URL
         description: 'Video Download URL'
         required: false
         type: string
@@ -45,24 +45,24 @@ jobs:
           secure: true
           username: ${{ secrets.SINA_MAIL }}
           password: ${{ secrets.SINA_AUTH_CODE }}
-          subject: '🚨 安全警报: ${{ inputs.object }}检测通知 - ${{ inputs.email_header }}'
+          subject: '🚨 Security Alert: ${{ inputs.object }}identification notification - ${{ inputs.email_header }}'
           body: |
-            尊敬的${{ inputs.email_header }},
+            Dear ${{ inputs.email_header }},
 
-            我们的无人机监控系统在您所在的区域检测到可疑目标。
+            We have detected a person in your yard
 
-            - **目标类型:** ${{ inputs.object }}
-            - **置信度:** ${{ inputs.confidence }}
-            - **检测时间:** ${{ inputs.time }}
+            - **Object Detected:** ${{ inputs.object }}
+            - **Confidence Level:** ${{ inputs.confidence }}
+            - **Detected Time:** ${{ inputs.time }}
 
-            ${{ inputs.download_url != '无可用视频' && '**请查看相关视频 footage:**' || '' }}
-            ${{ inputs.download_url != '无可用视频' && inputs.download_url || '' }}
+            ${{ inputs.download_url != 'No video available' && '**Please check the video footage:**' || '' }}
+            ${{ inputs.download_url != 'No video available' && inputs.download_url || '' }}
 
-            ${{ inputs.download_url != '无可用视频' && '请注意：视频链接将在24小时后失效。' || '' }}
+            ${{ inputs.download_url != 'No video available' && 'The video will expire in 24 hours' || '' }}
 
-            如有任何疑问，请及时联系安全团队。
+            If you have any questions, please feel free to reach out to us.
 
-            祝好,
-            无人机安全监控系统
+            Sincerely,
+            Drone security system
           to: ${{ inputs.recipient }}
-          from: 无人机安全监控系统 <${{ secrets.SINA_MAIL }}>
+          from: Drone security system <${{ secrets.SINA_MAIL }}> 
